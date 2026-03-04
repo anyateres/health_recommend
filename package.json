@@ -1,0 +1,30 @@
+{
+  "name": "health-recommend",
+  "version": "1.0.0",
+  "description": "Health nutrition recommendation app for people with insulin resistance",
+  "private": true,
+  "scripts": {
+    "dev": "npm run dev --workspace=frontend & npm run dev --workspace=backend",
+    "dev:frontend": "npm run dev --workspace=frontend",
+    "dev:backend": "npm run dev --workspace=backend",
+    "build:frontend": "npm run build --workspace=frontend",
+    "build:backend": "npm run build --workspace=backend",
+    "build": "npm run build:frontend && npm run build:backend",
+    "lint": "npm run lint --workspaces",
+    "test": "npm run test --workspaces"
+  },
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "keywords": [
+    "health",
+    "nutrition",
+    "insulin-resistance",
+    "ai",
+    "gemini",
+    "gcp"
+  ],
+  "author": "",
+  "license": "MIT"
+}

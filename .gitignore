@@ -1,0 +1,43 @@
+# Dependencies
+node_modules/
+/.pnp
+.pnp.js
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Build files
+/build
+/dist
+*.tsbuildinfo
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Deployment
+.gcloud
+*.pem
+
+# Cache
+.cache/
+.eslintcache
+
+# OS
+Thumbs.db
+
+# Test coverage
+coverage/
+.nyc_output/
