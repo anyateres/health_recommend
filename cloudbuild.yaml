@@ -9,7 +9,7 @@ steps:
       - '--repository-format=docker'
       - '--location=us-central1'
       - '--description=Health Recommend App'
-    onFailure: 'CONTINUE'  # Don't fail if repo already exists
+    allowFailure: true
 
   # Step 2: Build and push Docker image
   - name: 'gcr.io/cloud-builders/docker'
@@ -20,7 +20,6 @@ steps:
       - '-t'
       - 'us-docker.pkg.dev/$PROJECT_ID/health-recommend/health-recommend:$SHORT_SHA'
       - '.'
-    waitFor: ['-']
 
   # Step 3: Push to Artifact Registry
   - name: 'gcr.io/cloud-builders/docker'
@@ -33,4 +32,7 @@ images:
   - 'us-docker.pkg.dev/$PROJECT_ID/health-recommend/health-recommend:$SHORT_SHA'
 
 options:
-  machineType: 'N1_HIGHCPU_8'
+  machineType: 'N1_HIGHCPU_8'Run gcloud builds submit \
+  
+ERROR: (gcloud.builds.submit) interpreting cloudbuild.yaml as build config: .steps[0].onFailure: unused
+Error: Process completed with exit code 1.
