@@ -18,7 +18,7 @@ steps:
       - '-t'
       - 'us-docker.pkg.dev/$PROJECT_ID/health-recommend/health-recommend:latest'
       - '-t'
-      - 'us-docker.pkg.dev/$PROJECT_ID/health-recommend/health-recommend:${SHORT_SHA}'
+      - 'us-docker.pkg.dev/$PROJECT_ID/health-recommend/health-recommend:latest'
       - '.'
 
   # Step 3: Push to Artifact Registry
@@ -29,7 +29,6 @@ steps:
 
 images:
   - 'us-docker.pkg.dev/$PROJECT_ID/health-recommend/health-recommend:latest'
-  - 'us-docker.pkg.dev/$PROJECT_ID/health-recommend/health-recommend:${SHORT_SHA}'
 
 options:
   machineType: 'E2_HIGHCPU_8'
