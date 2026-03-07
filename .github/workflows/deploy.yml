@@ -30,8 +30,9 @@ jobs:
     
     - name: Set up Cloud SDK
       uses: google-github-actions/setup-gcloud@v1
-      with:
-        project_id: ${{ secrets.GCP_PROJECT_ID }}
+    
+    - name: Set GCP Project
+      run: gcloud config set project ${{ env.PROJECT_ID }}
     
     - name: Configure Docker
       run: gcloud auth configure-docker gcr.io
