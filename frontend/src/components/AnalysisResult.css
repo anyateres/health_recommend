@@ -21,21 +21,12 @@
   color: #333;
 }
 
-.health-badge {
+.grade-badge {
   padding: 0.5rem 1rem;
   border-radius: 20px;
   font-weight: bold;
   font-size: 0.9rem;
-}
-
-.health-badge.healthy {
-  background-color: #d4edda;
-  color: #155724;
-}
-
-.health-badge.caution {
-  background-color: #fff3cd;
-  color: #856404;
+  color: white;
 }
 
 .result-grid {
@@ -117,7 +108,7 @@
   border-left: 4px solid #ddd;
 }
 
-.ingredient-item.risky {
+.ingredient-item.high-sugar {
   background-color: #fff5f5;
   border-left-color: #ff6b6b;
 }
@@ -135,7 +126,7 @@
   text-align: right;
 }
 
-.risk-badge {
+.sugar-badge {
   background-color: #ff6b6b;
   color: white;
   padding: 0.25rem 0.75rem;

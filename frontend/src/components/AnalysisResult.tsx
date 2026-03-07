@@ -6,14 +6,15 @@ interface AnalysisResultProps {
 }
 
 export default function AnalysisResult({ result }: AnalysisResultProps) {
-  const healthStatus = result.isHealthy ? 'healthy' : 'caution'
-
   return (
-    <div className={`analysis-result ${healthStatus}`}>
+    <div className="analysis-result">
       <div className="result-header">
         <h2>Analysis Result</h2>
-        <div className={`health-badge ${healthStatus}`}>
-          {result.isHealthy ? '✅ Healthy' : '⚠️ Review Needed'}
+        <div 
+          className="grade-badge"
+          style={{ backgroundColor: result.gradeColor }}
+        >
+          Grade {result.nutritionGrade}
         </div>
       </div>
 
@@ -26,12 +27,12 @@ export default function AnalysisResult({ result }: AnalysisResultProps) {
         </div>
 
         <div className="result-card">
-          <h3>Health Score</h3>
-          <p className="big-number">{result.healthScore}/100</p>
+          <h3>Nutrition Score</h3>
+          <p className="big-number">{result.nutritionScore}/100</p>
           <div className="score-bar">
             <div
               className="score-fill"
-              style={{ width: `${result.healthScore}%` }}
+              style={{ width: `${result.nutritionScore}%`, backgroundColor: result.gradeColor }}
             />
           </div>
         </div>
@@ -44,7 +45,7 @@ export default function AnalysisResult({ result }: AnalysisResultProps) {
             <div
               key={idx}
               className={`ingredient-item ${
-                ingredient.isRiskyForInsulinResistance ? 'risky' : ''
+                ingredient.isHighSugar ? 'high-sugar' : ''
               }`}
             >
               <span className="ingredient-name">{ingredient.name}</span>
@@ -52,8 +53,8 @@ export default function AnalysisResult({ result }: AnalysisResultProps) {
                 {ingredient.quantity}
                 {ingredient.unit}
               </span>
-              {ingredient.isRiskyForInsulinResistance && (
-                <span className="risk-badge">⚠️ High</span>
+              {ingredient.isHighSugar && (
+                <span className="sugar-badge">🍯 High Sugar</span>
               )}
             </div>
           ))}

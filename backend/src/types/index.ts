@@ -4,9 +4,10 @@ export interface AnalysisResult {
   ingredients: Ingredient[]
   totalSugar: number
   sugarPerServing: number
-  healthScore: number
+  nutritionScore: number
+  nutritionGrade: 'A' | 'B' | 'C'
+  gradeColor: string
   recommendations: string[]
-  isHealthy: boolean
   servingSize: string
 }
 
@@ -15,7 +16,7 @@ export interface Ingredient {
   quantity: string
   unit: string
   sugarContent?: number
-  isRiskyForInsulinResistance: boolean
+  isHighSugar: boolean
 }
 
 export interface ApiResponse<T = unknown> {

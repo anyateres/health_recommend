@@ -5,6 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const { config } = require('./config.js');
 const analyzeRoutes = require('./routes.js');
+const aiAgentRoutes = require('./ai-agent-routes.js');
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.get('/health', (req, res) => {
 });
 
 app.use('/api/analyze', analyzeRoutes);
+app.use('/api/ai', aiAgentRoutes);
 
 // 404 handler
 app.use((req, res) => {

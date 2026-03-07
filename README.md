@@ -1,35 +1,68 @@
 # Health Nutrition Recommendation App
 
-A web application that analyzes product ingredients through photos or livestream to provide health recommendations for people with insulin resistance.
+A web application that analyzes product ingredients through photos or livestream to provide nutrition scores and health recommendations.
 
 ## Features
 
 - 📸 **Photo Upload & Analytics**: Upload product packaging photos to analyze ingredients
 - 🎥 **Livestream Support**: Real-time product analysis through device camera
-- 🧬 **Sugar Analysis**: Automatic sugar content detection and calculation
-- 💡 **Personalized Recommendations**: AI-powered health insights for insulin resistance
+- 🧬 **Nutrition Scoring**: Automatic nutrition score calculation with A/B/C grades and colors
+- 💡 **AI Agent**: Intelligent nutrition advice and personalized recommendations
+- 🤖 **Gemini Fast**: Powered by Google Gemini 1.5 Flash for fast, accurate analysis
 - 📱 **Mobile-First**: Responsive design optimized for smartphones
-- 🤖 **AI-Powered**: Powered by Google Gemini API for ingredient recognition
+- 🚀 **CI/CD**: Automated deployment to Cloud Run and Firebase
 
 ## Architecture
 
 ```
 health_recommend/
-├── frontend/          # React TypeScript web app
-├── backend/           # Node.js Express server
-├── deploy/            # GCP deployment configs (Cloud Run, Docker)
+├── frontend/          # React TypeScript web app (Firebase)
+├── backend/           # Node.js Express server (Cloud Run)
+├── .github/           # GitHub Actions CI/CD
+├── deploy/            # GCP deployment configs
 ├── docs/              # Documentation
 └── README.md
 ```
 
 ## Tech Stack
 
-- **Frontend**: React 18 + TypeScript + Vite
-- **Backend**: Node.js + Express + TypeScript
-- **AI/ML**: Google Gemini API
-- **Deployment**: GCP Cloud Run (serverless)
+- **Frontend**: React 18 + TypeScript + Vite (Firebase Hosting)
+- **Backend**: Node.js + Express (Google Cloud Run)
+- **AI/ML**: Google Gemini 1.5 Flash API
+- **AI Agent**: Custom nutrition assistant with personalized recommendations
+- **Deployment**: GCP Cloud Run + Firebase Hosting
 - **Containerization**: Docker
-- **Database**: Firebase/Firestore (optional)
+- **CI/CD**: GitHub Actions
+
+## Nutrition Scoring System
+
+The app uses a comprehensive nutrition scoring system:
+
+- **Grade A (80-100)**: 🟢 Green - Excellent nutritional value
+- **Grade B (60-79)**: 🟡 Yellow - Good nutritional value with room for improvement  
+- **Grade C (0-59)**: 🔴 Red - Poor nutritional value, high sugar content
+
+Scores are calculated based on:
+- Sugar content per serving
+- Ingredient quality
+- Nutritional balance
+- Overall health impact
+
+## AI Agent Features
+
+The integrated AI agent provides:
+
+- **Nutrition Advice**: Answer questions about healthy eating
+- **Meal Analysis**: Analyze ingredient combinations for compatibility
+- **Personalized Recommendations**: Custom advice based on user profile and analysis history
+
+### API Endpoints
+
+```
+POST /api/ai/advice - Get nutrition advice
+POST /api/ai/meal-analysis - Analyze meal combinations  
+POST /api/ai/personalized - Get personalized recommendations
+```
 
 ## Prerequisites
 
@@ -183,17 +216,49 @@ use that URL on your phone or in any browser and camera access will work.
 - Check browser camera permissions
 - Try a different browser
 
-## Deployment on GCP Cloud Run
+## CI/CD Deployment
 
-### 1. Build Docker Image
+The app uses GitHub Actions for automated deployment:
+
+### Prerequisites
+
+1. **GCP Setup**:
+   - Create a GCP project
+   - Enable Cloud Run API
+   - Enable Container Registry API
+   - Create a service account with necessary permissions
+   - Generate a service account key (JSON)
+
+2. **Firebase Setup**:
+   - Create a Firebase project
+   - Enable Firebase Hosting
+   - Generate a Firebase service account key
+
+3. **GitHub Secrets** (Settings > Secrets and variables > Actions):
+   ```
+   GCP_PROJECT_ID: your-gcp-project-id
+   GCP_SA_KEY: your-service-account-json
+   GEMINI_API_KEY: your-gemini-api-key
+   FIREBASE_PROJECT_ID: your-firebase-project-id
+   FIREBASE_SERVICE_ACCOUNT: your-firebase-service-account-json
+   VITE_API_URL: your-cloud-run-url
+   ```
+
+### Automated Deployment
+
+Push to `main` branch to trigger automatic deployment:
+- **Backend**: Deployed to Google Cloud Run
+- **Frontend**: Deployed to Firebase Hosting
+
+### Manual Deployment
+
+#### Backend (Cloud Run)
 ```bash
-docker build -t health-recommend-backend:latest ./backend
-docker tag health-recommend-backend:latest gcr.io/YOUR_PROJECT_ID/health-recommend:latest
+# Build and push Docker image
+docker build -t gcr.io/YOUR_PROJECT_ID/health-recommend:latest .
 docker push gcr.io/YOUR_PROJECT_ID/health-recommend:latest
-```
 
-### 2. Deploy to Cloud Run
-```bash
+# Deploy to Cloud Run
 gcloud run deploy health-recommend \
   --image gcr.io/YOUR_PROJECT_ID/health-recommend:latest \
   --platform managed \
@@ -202,15 +267,26 @@ gcloud run deploy health-recommend \
   --set-env-vars GEMINI_API_KEY=your_key
 ```
 
-### 3. Deploy Frontend to Cloud Storage + CDN
-See [deploy/README.md](deploy/README.md) for detailed instructions.
+#### Frontend (Firebase)
+```bash
+cd frontend
+npm run build
+firebase deploy --project YOUR_PROJECT_ID
+```
 
 ## API Endpoints
 
+### Analysis Endpoints
 - `POST /api/analyze/image` - Analyze product image
 - `POST /api/analyze/livestream` - Analyze livestream frame
-- `GET /api/recommendations/:userId` - Get personalized recommendations
-- `POST /api/health-profile` - Save user health profile
+
+### AI Agent Endpoints
+- `POST /api/ai/advice` - Get nutrition advice
+- `POST /api/ai/meal-analysis` - Analyze meal combinations
+- `POST /api/ai/personalized` - Get personalized recommendations
+
+### Health Endpoints
+- `GET /health` - Health check
 
 ## Budget Optimization for GCP
 
