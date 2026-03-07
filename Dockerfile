@@ -13,7 +13,7 @@ RUN npm ci --workspace=backend
 # Copy source code
 COPY backend/ ./backend/
 
-# Build the backend
+# Build the backend (no actual build needed for JS)
 WORKDIR /app/backend
 RUN npm run build
 
@@ -29,12 +29,12 @@ COPY backend/package*.json ./backend/
 # Install only production dependencies
 RUN npm ci --workspace=backend --omit=dev
 
-# Copy built application
-COPY --from=builder /app/backend/dist ./backend/dist
+# Copy source files (no dist directory for JS backend)
+COPY backend/ ./backend/
 
 EXPOSE 3000
 
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
   CMD node -e "require('http').get('http://localhost:3000/health', (r) => {if (r.statusCode !== 200) throw new Error(r.statusCode)})"
 
-CMD ["node", "backend/dist/index.js"]
+CMD ["node", "backend/src/index.js"]
