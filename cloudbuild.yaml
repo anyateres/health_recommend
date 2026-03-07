@@ -1,0 +1,36 @@
+steps:
+  # Step 1: Create Artifact Registry repository if it doesn't exist
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+      - 'artifacts'
+      - 'repositories'
+      - 'create'
+      - 'health-recommend'
+      - '--repository-format=docker'
+      - '--location=us-central1'
+      - '--description=Health Recommend App'
+    onFailure: 'CONTINUE'  # Don't fail if repo already exists
+
+  # Step 2: Build and push Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'us-docker.pkg.dev/$PROJECT_ID/health-recommend/health-recommend:latest'
+      - '-t'
+      - 'us-docker.pkg.dev/$PROJECT_ID/health-recommend/health-recommend:$SHORT_SHA'
+      - '.'
+    waitFor: ['-']
+
+  # Step 3: Push to Artifact Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'us-docker.pkg.dev/$PROJECT_ID/health-recommend/health-recommend:latest'
+
+images:
+  - 'us-docker.pkg.dev/$PROJECT_ID/health-recommend/health-recommend:latest'
+  - 'us-docker.pkg.dev/$PROJECT_ID/health-recommend/health-recommend:$SHORT_SHA'
+
+options:
+  machineType: 'N1_HIGHCPU_8'
