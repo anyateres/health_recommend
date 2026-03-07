@@ -16,19 +16,17 @@ steps:
     args:
       - 'build'
       - '-t'
-      - 'us-docker.pkg.dev/$PROJECT_ID/health-recommend/health-recommend:latest'
-      - '-t'
-      - 'us-docker.pkg.dev/$PROJECT_ID/health-recommend/health-recommend:latest'
+      - 'us-central1-docker.pkg.dev/$PROJECT_ID/health-recommend/health-recommend:latest'
       - '.'
 
   # Step 3: Push to Artifact Registry
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'push'
-      - 'us-docker.pkg.dev/$PROJECT_ID/health-recommend/health-recommend:latest'
+      - 'us-central1-docker.pkg.dev/$PROJECT_ID/health-recommend/health-recommend:latest'
 
 images:
-  - 'us-docker.pkg.dev/$PROJECT_ID/health-recommend/health-recommend:latest'
+  - 'us-central1-docker.pkg.dev/$PROJECT_ID/health-recommend/health-recommend:latest'
 
 options:
   machineType: 'E2_HIGHCPU_8'

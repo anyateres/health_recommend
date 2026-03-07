@@ -43,7 +43,7 @@ jobs:
     - name: Deploy to Cloud Run
       run: |
         gcloud run deploy $SERVICE_NAME \
-          --image us-docker.pkg.dev/$PROJECT_ID/health-recommend/$SERVICE_NAME:latest \
+          --image us-central1-docker.pkg.dev/$PROJECT_ID/health-recommend/$SERVICE_NAME:latest \
           --platform managed \
           --region $REGION \
           --allow-unauthenticated \
