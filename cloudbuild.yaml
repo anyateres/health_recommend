@@ -32,4 +32,4 @@ images:
   - 'us-docker.pkg.dev/$PROJECT_ID/health-recommend/health-recommend:$SHORT_SHA'
 
 options:
-  machineType: 'N1_HIGHCPU_8'
+  machineType: 'E2_HIGHCPU_8'
