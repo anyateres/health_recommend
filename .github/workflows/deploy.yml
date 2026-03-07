@@ -34,6 +34,14 @@ jobs:
     - name: Set GCP Project
       run: gcloud config set project ${{ env.PROJECT_ID }}
     
+    - name: Ensure Artifact Registry Repository Exists
+      run: |
+        gcloud artifacts repositories create health-recommend \
+          --repository-format=docker \
+          --location=$REGION \
+          --description="Health Recommend App" \
+          2>/dev/null || true
+    
     - name: Build and Push to Artifact Registry
       run: |
         gcloud builds submit \
