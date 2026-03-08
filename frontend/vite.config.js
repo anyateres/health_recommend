@@ -6,14 +6,19 @@ const certPath = '/home/anya/IdeaProjects/health_recommend/cert.pem'
 const keyPath = '/home/anya/IdeaProjects/health_recommend/key.pem'
 const hasCerts = fs.existsSync(certPath) && fs.existsSync(keyPath)
 
+const serverConfig = {
+    port: 5173,
+    host: '0.0.0.0',
+};
+
+if (hasCerts) {
+    serverConfig.https = {
+        key: fs.readFileSync(keyPath),
+        cert: fs.readFileSync(certPath),
+    };
+}
+
 export default defineConfig({
     plugins: [react()],
-    server: {
-        port: 5173,
-        host: '0.0.0.0',
-        https: hasCerts ? {
-            key: fs.readFileSync(keyPath),
-            cert: fs.readFileSync(certPath),
-        } : false,
-    },
+    server: serverConfig,
 });
