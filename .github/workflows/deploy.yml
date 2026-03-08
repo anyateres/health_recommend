@@ -36,11 +36,18 @@ jobs:
     
     - name: Build and Push to Artifact Registry
       run: |
+        set -euo pipefail
+
         BUILD_ID=$(gcloud builds submit \
           --config=cloudbuild.yaml \
           --region="$REGION" \
           --async \
-          --format='value(metadata.build.id)')
+          --format='value(id)')
+
+        if [ -z "$BUILD_ID" ]; then
+          echo "Failed to resolve BUILD_ID from gcloud output"
+          exit 1
+        fi
 
         echo "Submitted build: $BUILD_ID"
 
