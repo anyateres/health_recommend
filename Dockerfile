@@ -32,9 +32,9 @@ RUN npm ci --workspace=backend --omit=dev
 # Copy source files (no dist directory for JS backend)
 COPY backend/ ./backend/
 
-EXPOSE 3000
+EXPOSE 8080
 
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD node -e "require('http').get('http://localhost:3000/health', (r) => {if (r.statusCode !== 200) throw new Error(r.statusCode)})"
+  CMD node -e "const p=process.env.PORT||8080;require('http').get('http://localhost:'+p+'/health',(r)=>{if(r.statusCode!==200) throw new Error(r.statusCode)})"
 
 CMD ["node", "backend/src/index.js"]

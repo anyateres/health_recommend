@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const http = require('http');
 const https = require('https');
 const fs = require('fs');
 const path = require('path');
@@ -47,24 +48,34 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = config.port;
+const IS_CLOUD_RUN = Boolean(process.env.K_SERVICE);
 
 // Load HTTPS certificates
 const certPath = path.join(__dirname, '../../cert.pem');
 const keyPath = path.join(__dirname, '../../key.pem');
 
-if (!fs.existsSync(certPath) || !fs.existsSync(keyPath)) {
-  console.error('❌ HTTPS certificates not found!');
-  console.error('Generate with: openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes -subj "/CN=localhost"');
-  process.exit(1);
+if (IS_CLOUD_RUN) {
+  http.createServer(app).listen(PORT, '0.0.0.0', () => {
+    console.info(`✅ Cloud Run HTTP server running on port ${PORT}`);
+  });
+} else {
+  if (!fs.existsSync(certPath) || !fs.existsSync(keyPath)) {
+    console.warn('⚠️ HTTPS certificates not found, starting HTTP server for local development');
+    http.createServer(app).listen(PORT, '0.0.0.0', () => {
+      console.info(`\n✅ HTTP Server running`);
+      console.info(`📱 http://localhost:${PORT}`);
+      console.info(`🌐 http://192.168.x.x:${PORT}\n`);
+    });
+  } else {
+    const options = {
+      key: fs.readFileSync(keyPath),
+      cert: fs.readFileSync(certPath),
+    };
+
+    https.createServer(options, app).listen(PORT, '0.0.0.0', () => {
+      console.info(`\n✅ HTTPS Server running`);
+      console.info(`📱 https://localhost:${PORT}`);
+      console.info(`🌐 https://192.168.x.x:${PORT}\n`);
+    });
+  }
 }
-
-const options = {
-  key: fs.readFileSync(keyPath),
-  cert: fs.readFileSync(certPath),
-};
-
-https.createServer(options, app).listen(PORT, () => {
-  console.info(`\n✅ HTTPS Server running`);
-  console.info(`📱 https://localhost:${PORT}`);
-  console.info(`🌐 https://192.168.x.x:${PORT}\n`);
-});
