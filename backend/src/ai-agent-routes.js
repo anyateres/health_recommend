@@ -1,5 +1,5 @@
 const express = require('express');
-const { AIAgentService } = require('../ai-agent.js');
+const { AIAgentService } = require('./ai-agent.js');
 
 const router = express.Router();
 
