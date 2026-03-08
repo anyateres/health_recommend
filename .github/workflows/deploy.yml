@@ -88,6 +88,12 @@ jobs:
     
     steps:
     - uses: actions/checkout@v3
+
+    - name: Authenticate to Google Cloud (OIDC)
+      uses: google-github-actions/auth@v1
+      with:
+        workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+        service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
     
     - name: Setup Node.js
       uses: actions/setup-node@v3
@@ -107,9 +113,4 @@ jobs:
         VITE_API_URL: ${{ secrets.VITE_API_URL }}
     
     - name: Deploy to Firebase
-      uses: FirebaseExtended/action-hosting-deploy@v0
-      with:
-        repoToken: '${{ secrets.GITHUB_TOKEN }}'
-        firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}'
-        channelId: live
-        projectId: ${{ secrets.FIREBASE_PROJECT_ID }}
+      run: npx firebase-tools@latest deploy --only hosting --project "$FIREBASE_PROJECT_ID" --non-interactive

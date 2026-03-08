@@ -1,6 +1,6 @@
 # Firebase Setup for Frontend Deployment
 
-The Firebase deployment step is currently commented out in the GitHub Actions workflow. To enable it, follow these steps:
+This project uses keyless OIDC authentication in GitHub Actions for Firebase deployment.
 
 ## 1. Create a Firebase Project
 
@@ -8,19 +8,22 @@ The Firebase deployment step is currently commented out in the GitHub Actions wo
 2. Create a new project or use an existing one
 3. Enable Firebase Hosting for your project
 
-## 2. Generate Service Account Key
+## 2. Grant Required Roles to GitHub Service Account
 
-1. In Firebase Console, go to **Project Settings** → **Service Accounts**
-2. Click **Generate New Private Key**
-3. Download the JSON file (keep it secure!)
+In Google Cloud IAM, grant your GitHub Actions service account (the same one used for Cloud Run deploy) these roles for the Firebase project:
+
+- `Firebase Hosting Admin`
+- `Firebase Admin SDK Administrator Service Agent` (if required by your org setup)
+- `Viewer` (optional, for diagnostics)
 
 ## 3. Add GitHub Secrets
 
 Add the following secrets to your GitHub repository (Settings → Secrets and Variables → Actions):
 
-- `FIREBASE_SERVICE_ACCOUNT`: Paste the entire contents of the downloaded JSON file
 - `FIREBASE_PROJECT_ID`: Your Firebase project ID (found in Firebase Console)
 - `VITE_API_URL`: Your Cloud Run backend URL (e.g., `https://health-recommend-xxxxx-uc.a.run.app`)
+- `GCP_WORKLOAD_IDENTITY_PROVIDER`: Existing OIDC provider for your repo
+- `GCP_SERVICE_ACCOUNT`: Existing deploy service account email
 
 ## 4. Initialize Firebase in Your Project (Optional, if not already done)
 
@@ -41,18 +44,13 @@ When prompted:
 - Configure as single-page app: Yes
 - Automatic builds with GitHub: No (we're using GitHub Actions)
 
-## 5. Uncomment Firebase Deployment in Workflow
+## 5. Firebase Deployment in Workflow
 
-Edit `.github/workflows/deploy.yml` and uncomment the Firebase deployment step:
+The workflow deploy step uses keyless auth and `firebase-tools`:
 
 ```yaml
 - name: Deploy to Firebase
-  uses: FirebaseExtended/action-hosting-deploy@v0
-  with:
-    repoToken: '${{ secrets.GITHUB_TOKEN }}'
-    firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}'
-    channelId: live
-    projectId: ${{ secrets.FIREBASE_PROJECT_ID }}
+  run: npx firebase-tools@latest deploy --only hosting --project "$FIREBASE_PROJECT_ID" --non-interactive
 ```
 
 ## 6. Configure Firebase Hosting (firebase.json)
@@ -85,6 +83,6 @@ Commit and push your changes. The next workflow run will deploy your frontend to
 ## Current Workflow Status
 
 ✅ Backend deploys to Cloud Run successfully  
-⚠️ Frontend builds successfully but deployment is disabled (waiting for Firebase configuration)
+✅ Frontend builds and deploys to Firebase Hosting with OIDC (no key file)
 
 Once Firebase is configured, your frontend will be available at `https://your-project-id.web.app` or your custom domain.
