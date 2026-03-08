@@ -22,7 +22,7 @@ export interface Ingredient {
 export interface HealthProfile {
   age: number
   gender: string
-  insulinResistanceLevel: 'mild' | 'moderate' | 'severe'
+  nutritionRiskLevel: 'low' | 'medium' | 'high'
   targetSugarIntake: number
 }
 

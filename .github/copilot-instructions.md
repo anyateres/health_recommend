@@ -1,7 +1,7 @@
 # Copilot Instructions for Health Recommendation App
 
 ## Project Overview
-Health nutrition recommendation app with photo/livestream analysis for people with insulin resistance.
+Health nutrition recommendation app with photo/livestream analysis focused on nutrition score.
 
 ## Technology Stack
 - Frontend: React 18 + TypeScript + Vite
@@ -37,7 +37,7 @@ Health nutrition recommendation app with photo/livestream analysis for people wi
 2. Livestream camera support
 3. Ingredient extraction using Gemini
 4. Sugar content calculation
-5. Health recommendations for insulin resistance
+5. Health recommendations based on nutrition score
 6. User health profile management
 7. Mobile-responsive UI
 

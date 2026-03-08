@@ -1,7 +1,7 @@
 {
   "name": "health-recommend",
   "version": "1.0.0",
-  "description": "Health nutrition recommendation app for people with insulin resistance",
+  "description": "Health nutrition recommendation app focused on nutrition score analysis",
   "private": true,
   "scripts": {
     "dev": "npm run dev --workspace=frontend & npm run dev --workspace=backend",
@@ -20,7 +20,7 @@
   "keywords": [
     "health",
     "nutrition",
-    "insulin-resistance",
+    "nutrition-score",
     "ai",
     "gemini",
     "gcp"
