@@ -91,20 +91,6 @@
   cursor: not-allowed;
 }
 
-.choose-btn {
-  margin-top: 0.75rem;
-  padding: 0.6rem 1rem;
-  border: 1px solid #667eea;
-  border-radius: 8px;
-  background: white;
-  color: #333;
-  cursor: pointer;
-}
-
-.choose-btn:hover {
-  background: #f5f5f5;
-}
-
 @media (max-width: 600px) {
   .file-label {
     padding: 1rem;
