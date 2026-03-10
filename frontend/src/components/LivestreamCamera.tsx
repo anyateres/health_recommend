@@ -6,9 +6,10 @@ import './LivestreamCamera.css'
 interface LivestreamCameraProps {
   onResult: (result: AnalysisResult) => void
   onLoadingChange?: (isLoading: boolean) => void
+  onClearResult?: () => void
 }
 
-export default function LivestreamCamera({ onResult, onLoadingChange }: LivestreamCameraProps) {
+export default function LivestreamCamera({ onResult, onLoadingChange, onClearResult }: LivestreamCameraProps) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [streaming, setStreaming] = useState(false)
@@ -80,6 +81,7 @@ export default function LivestreamCamera({ onResult, onLoadingChange }: Livestre
           setStreaming(true)
           setDebugInfo('Camera ready!')
           console.log('Step 8: Camera feed ready')
+          onClearResult?.()
         }, 500)
       } else {
         console.error('❌ videoRef.current is NULL!')

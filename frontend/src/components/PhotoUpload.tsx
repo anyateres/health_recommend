@@ -6,9 +6,10 @@ import './PhotoUpload.css'
 interface PhotoUploadProps {
   onResult: (result: AnalysisResult) => void
   onLoadingChange?: (isLoading: boolean) => void
+  onClearResult?: () => void
 }
 
-export default function PhotoUpload({ onResult, onLoadingChange }: PhotoUploadProps) {
+export default function PhotoUpload({ onResult, onLoadingChange, onClearResult }: PhotoUploadProps) {
   const [file, setFile] = useState<File | null>(null)
   const [preview, setPreview] = useState<string>('')
   const [loading, setLoading] = useState(false)
@@ -25,6 +26,7 @@ export default function PhotoUpload({ onResult, onLoadingChange }: PhotoUploadPr
       }
       reader.readAsDataURL(selectedFile)
       setError('')
+      onClearResult?.()
     }
   }
 
