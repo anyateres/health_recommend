@@ -27,12 +27,6 @@ function App() {
       <main className="main">
         <div className="tabs">
           <button
-            className={`tab-btn ${activeTab === 'photo' ? 'active' : ''}`}
-            onClick={() => setActiveTab('photo')}
-          >
-            📸 Upload Photo
-          </button>
-          <button
             className={`tab-btn ${activeTab === 'livestream' ? 'active' : ''}`}
             onClick={() => setActiveTab('livestream')}
           >
