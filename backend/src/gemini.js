@@ -6,7 +6,7 @@ const genAI = new GoogleGenerativeAI(config.geminiApiKey);
 
 const analyzeImage = async (imageData, mimeType = 'image/jpeg') => {
   try {
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash-latest' });
+    const model = genAI.getGenerativeModel({ model: 'gemini-pro-vision' });
 
     // Convert base64 to Image object
     const imageParts = [

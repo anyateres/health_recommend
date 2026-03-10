@@ -30,8 +30,7 @@ export default function PhotoUpload({ onResult }: PhotoUploadProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!file) {
-      // Open file picker if no file selected
-      fileInputRef.current?.click()
+      setError('Please select a file')
       return
     }
 
@@ -78,10 +77,10 @@ export default function PhotoUpload({ onResult }: PhotoUploadProps) {
 
         <button
           type="submit"
-          disabled={loading}
+          disabled={!file || loading}
           className="submit-btn"
         >
-          {loading ? 'Analyzing...' : file ? 'Analyze Product' : 'Upload Photo'}
+          {loading ? 'Analyzing...' : 'Analyze Product'}
         </button>
       </form>
     </div>
