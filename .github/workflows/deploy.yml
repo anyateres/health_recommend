@@ -75,7 +75,7 @@ jobs:
           --platform managed \
           --region $REGION \
           --allow-unauthenticated \
-          --set-env-vars "GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}" \
+          --set-env-vars "GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }},CORS_ORIGIN=${{ secrets.CORS_ORIGIN }}" \
           --memory 512Mi \
           --cpu 1
 
