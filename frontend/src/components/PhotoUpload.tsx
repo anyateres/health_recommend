@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { AnalysisResult } from '../types'
 import { analyzeImage } from '../utils/api'
 import './PhotoUpload.css'
@@ -12,6 +12,7 @@ export default function PhotoUpload({ onResult }: PhotoUploadProps) {
   const [preview, setPreview] = useState<string>('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0]
@@ -56,6 +57,7 @@ export default function PhotoUpload({ onResult }: PhotoUploadProps) {
             onChange={handleFileChange}
             id="file-input"
             className="file-input"
+            ref={fileInputRef}
           />
           <label htmlFor="file-input" className="file-label">
             {preview ? (
@@ -69,6 +71,13 @@ export default function PhotoUpload({ onResult }: PhotoUploadProps) {
               </div>
             )}
           </label>
+          <button
+            type="button"
+            className="choose-btn"
+            onClick={() => fileInputRef.current?.click()}
+          >
+            Choose Photo
+          </button>
         </div>
 
         {error && <div className="error-message">{error}</div>}

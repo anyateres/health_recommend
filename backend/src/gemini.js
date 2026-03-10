@@ -4,7 +4,7 @@ const { v4: uuidv4 } = require('uuid');
 
 const genAI = new GoogleGenerativeAI(config.geminiApiKey);
 
-const analyzeImage = async (imageData) => {
+const analyzeImage = async (imageData, mimeType = 'image/jpeg') => {
   try {
     const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
 
@@ -13,7 +13,7 @@ const analyzeImage = async (imageData) => {
       {
         inlineData: {
           data: imageData.replace(/^data:image\/\w+;base64,/, ''),
-          mimeType: 'image/jpeg',
+          mimeType,
         },
       },
     ];

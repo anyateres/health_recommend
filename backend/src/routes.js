@@ -16,7 +16,7 @@ router.post('/image', upload.single('image'), async (req, res) => {
     const mimeType = req.file.mimetype || 'image/jpeg';
     const imageData = `data:${mimeType};base64,${base64Image}`;
 
-    const result = await analyzeImage(imageData);
+    const result = await analyzeImage(imageData, mimeType);
 
     res.json({
       success: true,
