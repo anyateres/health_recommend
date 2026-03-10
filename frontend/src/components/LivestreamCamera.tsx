@@ -5,9 +5,10 @@ import './LivestreamCamera.css'
 
 interface LivestreamCameraProps {
   onResult: (result: AnalysisResult) => void
+  onLoadingChange?: (isLoading: boolean) => void
 }
 
-export default function LivestreamCamera({ onResult }: LivestreamCameraProps) {
+export default function LivestreamCamera({ onResult, onLoadingChange }: LivestreamCameraProps) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [streaming, setStreaming] = useState(false)
@@ -126,6 +127,7 @@ export default function LivestreamCamera({ onResult }: LivestreamCameraProps) {
     if (!videoRef.current || !canvasRef.current) return
 
     setLoading(true)
+    onLoadingChange?.(true)
     setError('')
 
     try {
@@ -156,6 +158,7 @@ export default function LivestreamCamera({ onResult }: LivestreamCameraProps) {
       setError(err instanceof Error ? err.message : 'Analysis failed')
     } finally {
       setLoading(false)
+      onLoadingChange?.(false)
     }
   }
 

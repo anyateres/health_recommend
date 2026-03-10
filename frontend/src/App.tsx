@@ -8,6 +8,7 @@ import { AnalysisResult as AnalysisResultType } from './types'
 function App() {
   const [activeTab, setActiveTab] = useState<'photo' | 'livestream'>('photo')
   const [analysisResult, setAnalysisResult] = useState<AnalysisResultType | null>(null)
+  const [isAnalyzing, setIsAnalyzing] = useState(false)
   const resultRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -26,12 +27,6 @@ function App() {
       <main className="main">
         <div className="tabs">
           <button
-            className={`tab-btn ${activeTab === 'photo' ? 'active' : ''}`}
-            onClick={() => setActiveTab('photo')}
-          >
-            📸 Upload Photo
-          </button>
-          <button
             className={`tab-btn ${activeTab === 'livestream' ? 'active' : ''}`}
             onClick={() => setActiveTab('livestream')}
           >
@@ -41,12 +36,19 @@ function App() {
 
         <div className="tab-content">
           {activeTab === 'photo' && (
-            <PhotoUpload onResult={setAnalysisResult} />
+            <PhotoUpload onResult={setAnalysisResult} onLoadingChange={setIsAnalyzing} />
           )}
           {activeTab === 'livestream' && (
-            <LivestreamCamera onResult={setAnalysisResult} />
+            <LivestreamCamera onResult={setAnalysisResult} onLoadingChange={setIsAnalyzing} />
           )}
         </div>
+
+        {isAnalyzing && (
+          <div className="analysis-loading" aria-live="polite">
+            <div className="analysis-spinner" />
+            <p>Analyzing your image... please wait</p>
+          </div>
+        )}
 
         {analysisResult && (
           <div ref={resultRef}>

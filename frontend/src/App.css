@@ -67,6 +67,42 @@
   margin-bottom: 2rem;
 }
 
+.analysis-loading {
+  background-color: white;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.analysis-loading p {
+  margin: 0;
+  color: #333;
+  font-weight: 600;
+}
+
+.analysis-spinner {
+  width: 20px;
+  height: 20px;
+  border: 3px solid #e0e0e0;
+  border-top-color: #667eea;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .footer {
   background-color: rgba(0, 0, 0, 0.5);
   color: white;

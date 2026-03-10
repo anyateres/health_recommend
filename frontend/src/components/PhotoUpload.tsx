@@ -5,9 +5,10 @@ import './PhotoUpload.css'
 
 interface PhotoUploadProps {
   onResult: (result: AnalysisResult) => void
+  onLoadingChange?: (isLoading: boolean) => void
 }
 
-export default function PhotoUpload({ onResult }: PhotoUploadProps) {
+export default function PhotoUpload({ onResult, onLoadingChange }: PhotoUploadProps) {
   const [file, setFile] = useState<File | null>(null)
   const [preview, setPreview] = useState<string>('')
   const [loading, setLoading] = useState(false)
@@ -36,6 +37,7 @@ export default function PhotoUpload({ onResult }: PhotoUploadProps) {
     }
 
     setLoading(true)
+    onLoadingChange?.(true)
     setError('')
 
     try {
@@ -45,6 +47,7 @@ export default function PhotoUpload({ onResult }: PhotoUploadProps) {
       setError(err instanceof Error ? err.message : 'Analysis failed')
     } finally {
       setLoading(false)
+      onLoadingChange?.(false)
     }
   }
 
