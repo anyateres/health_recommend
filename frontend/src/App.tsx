@@ -12,7 +12,7 @@ function App() {
   return (
     <div className="app">
       <header className="header">
-        <h1>🏥 Health Nutrition Analyzer</h1>
+        <h1>Health Nutrition Analyzer</h1>
         <p>AI-powered recommendations based on nutrition score</p>
       </header>
 
