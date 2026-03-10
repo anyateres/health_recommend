@@ -6,6 +6,7 @@ import { useState, useRef, useEffect } from 'react'
 import { AnalysisResult as AnalysisResultType } from './types'
 
 function App() {
+  const [activeTab, setActiveTab] = useState<'photo' | 'livestream'>('photo')
   const [analysisResult, setAnalysisResult] = useState<AnalysisResultType | null>(null)
   const resultRef = useRef<HTMLDivElement>(null)
 
@@ -23,9 +24,28 @@ function App() {
       </header>
 
       <main className="main">
+        <div className="tabs">
+          <button
+            className={`tab-btn ${activeTab === 'photo' ? 'active' : ''}`}
+            onClick={() => setActiveTab('photo')}
+          >
+            📸 Upload Photo
+          </button>
+          <button
+            className={`tab-btn ${activeTab === 'livestream' ? 'active' : ''}`}
+            onClick={() => setActiveTab('livestream')}
+          >
+            🎥 Livestream
+          </button>
+        </div>
+
         <div className="tab-content">
-          <PhotoUpload onResult={setAnalysisResult} />
-          <LivestreamCamera onResult={setAnalysisResult} />
+          {activeTab === 'photo' && (
+            <PhotoUpload onResult={setAnalysisResult} />
+          )}
+          {activeTab === 'livestream' && (
+            <LivestreamCamera onResult={setAnalysisResult} />
+          )}
         </div>
 
         {analysisResult && (
