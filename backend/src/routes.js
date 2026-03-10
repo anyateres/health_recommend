@@ -41,7 +41,10 @@ router.post('/livestream', async (req, res) => {
       return res.status(400).json({ success: false, error: 'No image data provided' });
     }
 
-    const result = await analyzeImage(imageData);
+    const mimeMatch = typeof imageData === 'string' ? imageData.match(/^data:(image\/[^;]+);base64,/) : null;
+    const mimeType = mimeMatch ? mimeMatch[1] : 'image/jpeg';
+
+    const result = await analyzeImage(imageData, mimeType);
 
     res.json({
       success: true,

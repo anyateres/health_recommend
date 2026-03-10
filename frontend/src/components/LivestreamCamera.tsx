@@ -128,6 +128,10 @@ export default function LivestreamCamera({ onResult }: LivestreamCameraProps) {
     setError('')
 
     try {
+      if (videoRef.current.videoWidth === 0 || videoRef.current.videoHeight === 0) {
+        throw new Error('Camera is not ready yet. Please wait a moment and try again.')
+      }
+
       const ctx = canvasRef.current.getContext('2d')
       if (!ctx) throw new Error('Cannot get canvas context')
 
