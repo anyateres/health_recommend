@@ -4,10 +4,60 @@ const { v4: uuidv4 } = require('uuid');
 
 const genAI = new GoogleGenerativeAI(config.geminiApiKey);
 
+const PREFERRED_MODELS = [
+  'gemini-2.0-flash',
+  'gemini-1.5-flash',
+  'gemini-1.5-pro',
+  'gemini-1.0-pro-vision-latest',
+  'gemini-pro-vision',
+];
+
+const isModelNotFoundError = (error) => {
+  const message = error instanceof Error ? error.message : String(error || '');
+  return message.includes('404 Not Found') || message.includes('is not found for API version');
+};
+
+const getDiscoveredModels = async () => {
+  try {
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models?key=${config.geminiApiKey}`
+    );
+
+    if (!response.ok) {
+      return [];
+    }
+
+    const payload = await response.json();
+    const models = Array.isArray(payload?.models) ? payload.models : [];
+
+    return models
+      .filter((model) =>
+        Array.isArray(model?.supportedGenerationMethods) &&
+        model.supportedGenerationMethods.includes('generateContent')
+      )
+      .map((model) => String(model.name || '').replace(/^models\//, ''))
+      .filter(Boolean);
+  } catch (error) {
+    console.warn('Could not fetch model list, using fallback models only.');
+    return [];
+  }
+};
+
+const getCandidateModels = async () => {
+  const configuredModel = process.env.GEMINI_MODEL?.trim();
+  const discoveredModels = await getDiscoveredModels();
+
+  const combined = [
+    configuredModel,
+    ...PREFERRED_MODELS,
+    ...discoveredModels,
+  ].filter(Boolean);
+
+  return [...new Set(combined)];
+};
+
 const analyzeImage = async (imageData, mimeType = 'image/jpeg') => {
   try {
-    const model = genAI.getGenerativeModel({ model: 'gemini-pro-vision' });
-
     // Convert base64 to Image object
     const imageParts = [
       {
@@ -42,7 +92,27 @@ Return ONLY valid JSON (no markdown, no code blocks) with this structure:
 
 Be accurate and focus on nutritional value, sugar content, and overall health benefits.`;
 
-    const result = await model.generateContent([...imageParts, prompt]);
+    const candidateModels = await getCandidateModels();
+    let result;
+    let lastModelError;
+
+    for (const modelName of candidateModels) {
+      try {
+        const model = genAI.getGenerativeModel({ model: modelName });
+        result = await model.generateContent([...imageParts, prompt]);
+        break;
+      } catch (error) {
+        lastModelError = error;
+        if (!isModelNotFoundError(error)) {
+          throw error;
+        }
+      }
+    }
+
+    if (!result) {
+      throw lastModelError || new Error('No compatible Gemini model found for generateContent');
+    }
+
     const text = result.response.text();
 
     // Parse JSON from response
