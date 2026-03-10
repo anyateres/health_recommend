@@ -2,12 +2,18 @@ import './App.css'
 import PhotoUpload from './components/PhotoUpload'
 import LivestreamCamera from './components/LivestreamCamera'
 import AnalysisResult from './components/AnalysisResult'
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { AnalysisResult as AnalysisResultType } from './types'
 
 function App() {
-  const [activeTab, setActiveTab] = useState<'photo' | 'livestream'>('photo')
   const [analysisResult, setAnalysisResult] = useState<AnalysisResultType | null>(null)
+  const resultRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (analysisResult && resultRef.current) {
+      resultRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }, [analysisResult])
 
   return (
     <div className="app">
@@ -17,32 +23,15 @@ function App() {
       </header>
 
       <main className="main">
-        <div className="tabs">
-          <button
-            className={`tab-btn ${activeTab === 'photo' ? 'active' : ''}`}
-            onClick={() => setActiveTab('photo')}
-          >
-            📸 Upload Photo
-          </button>
-          <button
-            className={`tab-btn ${activeTab === 'livestream' ? 'active' : ''}`}
-            onClick={() => setActiveTab('livestream')}
-          >
-            🎥 Livestream
-          </button>
-        </div>
-
         <div className="tab-content">
-          {activeTab === 'photo' && (
-            <PhotoUpload onResult={setAnalysisResult} />
-          )}
-          {activeTab === 'livestream' && (
-            <LivestreamCamera onResult={setAnalysisResult} />
-          )}
+          <PhotoUpload onResult={setAnalysisResult} />
+          <LivestreamCamera onResult={setAnalysisResult} />
         </div>
 
         {analysisResult && (
-          <AnalysisResult result={analysisResult} />
+          <div ref={resultRef}>
+            <AnalysisResult result={analysisResult} />
+          </div>
         )}
       </main>
 

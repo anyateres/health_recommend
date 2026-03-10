@@ -14,6 +14,7 @@ export default function LivestreamCamera({ onResult }: LivestreamCameraProps) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [debugInfo, setDebugInfo] = useState<string>('Waiting for camera...')
+  const [capturedImage, setCapturedImage] = useState<string>('')
 
   const startCamera = async () => {
     try {
@@ -140,6 +141,15 @@ export default function LivestreamCamera({ onResult }: LivestreamCameraProps) {
       ctx.drawImage(videoRef.current, 0, 0)
 
       const imageData = canvasRef.current.toDataURL('image/jpeg')
+      
+      // Stop camera and show captured image
+      if (videoRef.current.srcObject) {
+        const tracks = (videoRef.current.srcObject as MediaStream).getTracks()
+        tracks.forEach((track) => track.stop())
+      }
+      setStreaming(false)
+      setCapturedImage(imageData)
+      
       const result = await analyzeLivestream(imageData)
       onResult(result)
     } catch (err) {
@@ -174,6 +184,9 @@ export default function LivestreamCamera({ onResult }: LivestreamCameraProps) {
           display: streaming ? 'block' : 'none',
         }}
       />
+      {capturedImage && !streaming && (
+        <img src={capturedImage} alt="Captured frame" className="video-feed" style={{ width: '100%', borderRadius: '8px' }} />
+      )}
       <canvas ref={canvasRef} style={{ display: 'none' }} />
 
       {streaming ? (
@@ -193,6 +206,12 @@ export default function LivestreamCamera({ onResult }: LivestreamCameraProps) {
             </button>
           </div>
         </>
+      ) : capturedImage ? (
+        <div className="button-group">
+          <button onClick={() => { setCapturedImage(''); startCamera(); }} className="retry-btn">
+            🔄 Capture New Photo
+          </button>
+        </div>
       ) : (
         <div className="camera-inactive">
           {error ? (
