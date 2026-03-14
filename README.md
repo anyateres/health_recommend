@@ -137,6 +137,73 @@ npm run dev
    - Click "📸 Capture & Analyze"
    - View real-time analysis
 
+## Reproducible Testing (for Judges)
+
+Use the exact steps below to verify the project end-to-end.
+
+### A) Install and configure
+
+```bash
+git clone <your-repo-url>
+cd health_recommend
+npm install
+cp .env.backend.example backend/.env
+cp .env.frontend.example frontend/.env.local
+```
+
+Set `GEMINI_API_KEY` in `backend/.env`.
+
+### B) Start backend and frontend
+
+Terminal 1:
+```bash
+cd backend
+node src/index.js
+```
+
+Terminal 2:
+```bash
+cd frontend
+npm run dev
+```
+
+### C) Verify backend is live
+
+```bash
+curl -k https://localhost:3000/health
+```
+
+Expected result contains:
+
+```json
+{"status":"ok"}
+```
+
+### D) Verify photo analysis flow
+
+1. Open `https://localhost:5173`
+2. Upload a product label image
+3. Click **Analyze Product**
+4. Confirm response shows:
+   - ingredients list
+   - sugar metrics
+   - health score + grade
+   - recommendations
+
+### E) Verify livestream flow
+
+1. Open **Livestream** tab
+2. Allow camera permission
+3. Capture a frame and analyze
+4. Confirm the same structured analysis fields are returned
+
+### Pass Criteria
+
+- `/health` returns `status: ok`
+- Photo upload analysis completes successfully
+- Livestream capture analysis completes successfully
+- Output includes ingredients, sugar values, health score, and recommendations
+
 ### Troubleshooting
 
 **Port already in use?**
